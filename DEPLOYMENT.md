@@ -64,8 +64,11 @@ npm run type-check
 1. **404 on page refresh**
    - Fixed by using hash routing in production
 
-2. **Assets not loading**
+2. **Assets not loading / main.ts not found**
    - Check base URL in `vite.config.ts` matches repository name
+   - Ensure `public` directory exists with required assets (vite.svg, etc.)
+   - Verify build generates correct paths in `dist/index.html`
+   - Run `npm run build:gh-pages` to rebuild with correct paths
 
 3. **Build failures**
    - Use `build:gh-pages` script which skips type checking
