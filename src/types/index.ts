@@ -32,6 +32,8 @@ export interface Application {
     category: string;
     icon?: string;
     color?: string;
+    uptime?: string;
+    lastUpdated?: string;
 }
 
 export interface ConcurrentUsersData {

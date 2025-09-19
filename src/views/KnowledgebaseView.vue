@@ -354,7 +354,7 @@
 import { ref, computed, onMounted, watch, type Component } from 'vue'
 import { 
   Reading, Search, Expand, Fold, House, Flag, Monitor, Tools, Document, 
-  QuestionFilled, Edit, Share, Printer, User, Calendar, Clock, View, 
+  QuestionFilled, Share, User, Calendar, Clock, View, 
   ArrowLeft, ArrowRight, Check, Close, Star, CircleCheck, Link
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -395,7 +395,6 @@ const searchQuery = ref<string>('')
 const activeMenuItem = ref<string>('overview')
 const currentSection = ref<string>('')
 const currentArticle = ref<string>('')
-const editMode = ref<boolean>(false)
 const selectedAppId = ref<number | null>(null)
 const favorites = ref<string[]>([])
 const isLoadingApps = ref<boolean>(true)
@@ -712,12 +711,12 @@ const currentArticleData = computed((): Article => {
   }
 })
 
-const previousArticle = computed(() => {
+const previousArticle = computed((): { title: string } | null => {
   // Logic to find previous article within the same app
   return null
 })
 
-const nextArticle = computed(() => {
+const nextArticle = computed((): { title: string } | null => {
   // Logic to find next article within the same app
   return null
 })
@@ -779,10 +778,6 @@ const updateBreadcrumb = (): void => {
   }
 }
 
-const toggleEditMode = (): void => {
-  editMode.value = !editMode.value
-}
-
 const toggleFavorite = (): void => {
   if (!selectedAppId.value || !activeMenuItem.value) return
   
@@ -804,10 +799,6 @@ const shareCurrentPage = (): void => {
   const url = `${window.location.origin}/knowledge-base/${selectedAppId.value}/${activeMenuItem.value}`
   navigator.clipboard.writeText(url)
   ElMessage.success('Page link copied to clipboard!')
-}
-
-const printPage = (): void => {
-  window.print()
 }
 
 const submitFeedback = (type: 'helpful' | 'not-helpful'): void => {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { Application } from '@/types';
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api',
@@ -196,7 +197,7 @@ export const getApplicationStats = async (applicationId: number) => {
       }
     };
     
-    return mockStats[applicationId] || mockStats[1];
+    return mockStats[applicationId as keyof typeof mockStats] || mockStats[1];
   }
 };
 
@@ -208,7 +209,7 @@ export const getAllApplicationsStats = async () => {
     // Return mock data for all applications
     const applications = await getApplications();
     const stats = await Promise.all(
-      applications.map(app => getApplicationStats(app.id))
+      applications.map((app: Application) => getApplicationStats(app.id))
     );
     
     const totalUsers = stats.reduce((sum, stat) => sum + stat.concurrentUsers.count, 0);
@@ -308,7 +309,7 @@ export const searchFAQs = async (query: string) => {
   } catch (error) {
     // Return filtered mock data if API fails
     const faqs = await getFAQs();
-    return faqs.filter(faq => 
+    return faqs.filter((faq: any) => 
       faq.question.toLowerCase().includes(query.toLowerCase()) ||
       faq.answer.toLowerCase().includes(query.toLowerCase())
     );
