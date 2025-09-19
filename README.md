@@ -4,7 +4,7 @@ This project is a monitoring application dashboard built with Vue 3, TypeScript,
 
 ## 🚀 Live Demo
 
-The application is deployed on GitHub Pages: [View Live Demo](https://YOUR_USERNAME.github.io/monitoring-dashboard/)
+The application is deployed on GitHub Pages: [View Live Demo](https://riconusap.github.io/monitoring-dashboard/)
 
 ## Features
 
@@ -106,12 +106,12 @@ This project is configured for automatic deployment to GitHub Pages using GitHub
 3. **Configure repository name (if different):**
    - If your repository name is not `monitoring-dashboard`, update the `base` path in `vite.config.ts`:
    ```typescript
-   base: process.env.NODE_ENV === 'production' ? '/YOUR_REPO_NAME/' : '/',
+   base: process.env.NODE_ENV === 'production' ? '/monitoring-dashboard/' : '/',
    ```
 
 4. **Automatic Deployment:**
    - The GitHub Actions workflow will automatically trigger on pushes to the `main` branch
-   - Your site will be available at: `https://YOUR_USERNAME.github.io/YOUR_REPO_NAME/`
+   - Your site will be available at: `https://YOUR_USERNAME.github.io/monitoring-dashboard/`
 
 ### Manual Deployment
 
