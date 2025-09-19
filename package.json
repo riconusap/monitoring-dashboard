@@ -1,0 +1,31 @@
+{
+  "name": "monitoring-dashboard",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Monitoring application dashboard built with Vue 3, TypeScript, and Vite",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "build:gh-pages": "NODE_ENV=production vite build",
+    "build:fast": "vite build",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --noEmit",
+    "deploy": "npm run build:gh-pages",
+    "serve:dist": "vite preview --port 3000"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "axios": "^1.6.8",
+    "element-plus": "^2.11.3",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "sass": "^1.72.0",
+    "typescript": "^5.4.3",
+    "vite": "^5.2.8",
+    "vue-tsc": "^2.0.6"
+  }
+}
