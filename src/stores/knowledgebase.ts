@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
-import type { FAQ, LoadingState, Application, Article, FavoriteArticle } from '@/types';
+import type { FAQ, LoadingState, FavoriteArticle } from '@/types';
 import { getFAQs, searchFAQs } from '@/services/api';
 
 export const useKnowledgebaseStore = defineStore('knowledgebase', () => {

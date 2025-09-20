@@ -22,20 +22,10 @@
 
       <div class="article-actions">
         <el-tooltip content="Add to favorites" placement="top">
-          <el-button 
-            :type="isFavorite ? 'primary' : 'default'"
-            :icon="isFavorite ? StarFilled : Star"
-            circle
-            @click="$emit('toggle-favorite')"
-          />
+          <!-- Icons removed as requested -->
         </el-tooltip>
         <el-tooltip content="Share article" placement="top">
-          <el-button 
-            type="default"
-            :icon="Share"
-            circle
-            @click="$emit('share-article')"
-          />
+          <!-- Icons removed as requested -->
         </el-tooltip>
         <el-dropdown @command="handleCommand">
           <el-button type="default" circle>
@@ -174,14 +164,12 @@
         <el-button 
           type="success" 
           @click="$emit('submit-feedback', 'helpful')"
-          :icon="Select"
         >
           Yes, helpful
         </el-button>
         <el-button 
           type="warning" 
           @click="$emit('submit-feedback', 'not-helpful')"
-          :icon="CloseBold"
         >
           Not helpful
         </el-button>
@@ -214,9 +202,6 @@ import { defineComponent, ref, computed, onMounted, nextTick, type PropType } fr
 import { ElMessage } from 'element-plus'
 import type { Article } from '@/composables/useKnowledgebase'
 import {
-  Star,
-  StarFilled,
-  Share,
   MoreFilled,
   Printer,
   Edit,
@@ -226,9 +211,7 @@ import {
   Clock,
   View,
   ArrowLeft,
-  ArrowRight,
-  Select,
-  CloseBold
+  ArrowRight
 } from '@element-plus/icons-vue'
 
 interface Heading {
@@ -247,9 +230,6 @@ interface RelatedArticle {
 export default defineComponent({
   name: 'ArticleContent',
   components: {
-    Star,
-    StarFilled,
-    Share,
     MoreFilled,
     Printer,
     Edit,
@@ -259,9 +239,7 @@ export default defineComponent({
     Clock,
     View,
     ArrowLeft,
-    ArrowRight,
-    Select,
-    CloseBold
+    ArrowRight
   },
   props: {
     article: {

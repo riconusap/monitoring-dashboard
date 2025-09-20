@@ -3,7 +3,7 @@ import { ElMessage } from 'element-plus'
 import { useDashboardStore } from '@/stores/dashboard'
 import type { Application } from '@/types'
 import {
-  Flag, Document, Tools, Monitor, Warning, Setting, Star
+  Flag
 } from '@element-plus/icons-vue'
 
 // Types
@@ -1166,7 +1166,6 @@ function validateFileSize(file, maxSizeMB = 10) {
       }
     }
 
-    const categoryId = parseInt(match[1])
     const articleId = parseInt(match[2])
     
     const article = getArticleById(selectedAppId.value, articleId)
@@ -1196,23 +1195,6 @@ function validateFileSize(file, maxSizeMB = 10) {
 
   const previousArticle = computed(() => null)
   const nextArticle = computed(() => null)
-
-  // Helper functions untuk nested categories
-  const flattenCategories = (categories: Category[]): Category[] => {
-    const result: Category[] = []
-    
-    const flatten = (cats: Category[], depth = 0) => {
-      cats.forEach(cat => {
-        result.push({ ...cat, depth } as Category & { depth: number })
-        if (cat.children && cat.children.length > 0) {
-          flatten(cat.children, depth + 1)
-        }
-      })
-    }
-    
-    flatten(categories)
-    return result
-  }
 
   const getCategoriesForApp = (appId: number): Category[] => {
     const app = knowledgebaseApps.value.find(app => app.app_id === appId)
@@ -1420,7 +1402,7 @@ function validateFileSize(file, maxSizeMB = 10) {
         id: 2,
         title: 'Troubleshooting',
         description: 'Common issues and solutions',
-        icon: Tools,
+        icon: Flag,
         section: 'troubleshooting'
       }
     ]

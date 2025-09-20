@@ -34,14 +34,7 @@
         @click="$emit('select-app', app.id)"
       >
         <div class="app-card-header">
-          <el-button
-            :icon="isApplicationFavorite(app.id) ? StarFilled : Star"
-            :type="isApplicationFavorite(app.id) ? 'warning' : 'default'"
-            size="small"
-            circle
-            @click="toggleFavorite($event, app.id)"
-            :class="{ 'favorite-active': isApplicationFavorite(app.id) }"
-          />
+          <!-- Icons removed as requested -->
         </div>
         <div class="app-card-body">
           <h3 class="app-name">{{ app.name }}</h3>
@@ -73,7 +66,6 @@
     <!-- Favorite Articles section -->
     <div v-if="favoriteArticles.length > 0" class="favorite-articles-section">
       <h3 class="section-title">
-        <el-icon class="favorite-icon"><StarFilled /></el-icon>
         Favorite Articles
       </h3>
       <div class="favorite-articles-grid">
@@ -104,14 +96,11 @@
 <script lang="ts">
 import { defineComponent, computed, type PropType } from 'vue'
 import { useKnowledgebaseStore } from '@/stores/knowledgebase'
-import { StarFilled, Star } from '@element-plus/icons-vue'
 import type { Application, FavoriteArticle } from '@/types'
 
 export default defineComponent({
   name: 'AppWelcomeSection',
   components: {
-    StarFilled,
-    Star
   },
   props: {
     applications: {

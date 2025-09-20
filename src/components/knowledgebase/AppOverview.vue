@@ -329,7 +329,8 @@ export default defineComponent({
       ]
     })
 
-    const formatDate = (date: Date): string => {
+    const formatDate = (date: Date | undefined): string => {
+      if (!date) return 'Never'
       return new Intl.DateTimeFormat('en-US', {
         month: 'short',
         day: 'numeric',
