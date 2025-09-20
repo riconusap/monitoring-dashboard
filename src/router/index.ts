@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 import DashboardView from '@/views/DashboardView.vue'
-import KnowledgebaseView from '@/views/KnowledgebaseView.vue'
 
 // Use hash history for GitHub Pages compatibility
 const router = createRouter({
@@ -23,11 +22,6 @@ const router = createRouter({
       name: 'Dashboard',
       component: DashboardView
     },
-    {
-      path: '/knowledgebase',
-      name: 'Knowledgebase',
-      component: KnowledgebaseView
-    }
   ]
 })
 

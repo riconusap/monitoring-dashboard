@@ -34,6 +34,28 @@ export interface Application {
     color?: string;
     uptime?: string;
     lastUpdated?: string;
+    isFavorite?: boolean;
+}
+
+export interface Article {
+    id: number;
+    title: string;
+    content: string;
+    applicationId: number;
+    category: string;
+    tags?: string[];
+    createdAt: string;
+    updatedAt?: string;
+    isFavorite?: boolean;
+}
+
+export interface FavoriteArticle {
+    id: number;
+    title: string;
+    applicationName: string;
+    applicationId: number;
+    category: string;
+    createdAt: string;
 }
 
 export interface ConcurrentUsersData {

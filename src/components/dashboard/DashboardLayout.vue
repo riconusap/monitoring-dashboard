@@ -91,9 +91,7 @@
               </span>
             </template>
             <div class="tab-content" v-loading="isTabLoading">
-              <slot name="knowledgebase">
-                <KnowledgebaseContent />
-              </slot>
+              <KnowledgebaseViewVue />
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -121,81 +119,79 @@
   </el-container>
 </template>
 
-<script>
+<script lang="ts">
+import { ref, computed, defineComponent } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { 
   Monitor, Bell, User, ArrowDown, Sunny, Moon, SwitchButton,
   Setting, Help, Odometer, Reading, ChatDotRound, Document, Connection
 } from '@element-plus/icons-vue'
-import KnowledgebaseContent from '../../views/KnowledgebaseView.vue'
+import KnowledgebaseViewVue from '@/views/KnowledgebaseView.vue'
 
-export default {
+
+export default defineComponent({
   name: 'DashboardLayout',
   components: {
-    KnowledgebaseContent,
     Monitor, Bell, User, ArrowDown, Sunny, Moon, SwitchButton,
-    Setting, Help, Odometer, Reading, ChatDotRound, Document, Connection
+    Setting, Help, Odometer, Reading, ChatDotRound, Document, Connection, KnowledgebaseViewVue
   },
-  data() {
-    return {
-      isDark: false,
-      activeTab: 'monitoring',
-      isTabLoading: false
+  emits: [],
+  setup() {
+    // Router composables
+    const router = useRouter()
+    const route = useRoute()
+
+    // Reactive state
+    const isDark = ref<boolean>(false)
+    const activeTab = ref<string>('monitoring')
+    const isTabLoading = ref<boolean>(false)
+
+    // Set initial tab based on route
+    if (route.params.tab === 'knowledgebase') {
+      activeTab.value = 'knowledgebase'
     }
-  },
-  
-  computed: {
-    authStore() {
+
+    // Computed properties
+    const authStore = computed(() => {
       // Simple auth store access
       return {
         user: { username: 'Admin User' },
         logout: () => {
-          this.$router.push('/login')
+          router.push('/login')
         }
       }
-    }
-  },
-  
-  mounted() {
-    // Set active tab based on current route
-    this.updateActiveTab()
-    
-    // Listen for route changes
-    this.$watch('$route', () => {
-      this.updateActiveTab()
     })
-  },
-  
-  methods: {
-    updateActiveTab() {
-      const path = this.$route.path
-      if (path.includes('knowledgebase')) {
-        this.activeTab = 'knowledgebase'
-      } else {
-        this.activeTab = 'monitoring'
-      }
-    },
-    
-    beforeTabLeave(activeName, oldActiveName) {
+
+    // Methods
+    const beforeTabLeave = (activeName: string, oldActiveName: string): boolean => {
       // Optional: Add validation before leaving tab
       // For example, check if there are unsaved changes
       console.log(`Switching from ${oldActiveName} to ${activeName}`)
       return true // Allow tab change
-    },
-    
-    toggleTheme() {
-      this.isDark = !this.isDark
-      ElMessage.success(`Switched to ${this.isDark ? 'dark' : 'light'} theme`)
+    }
+
+    const handleTabChange = (): void => {
+      isTabLoading.value = true
+      // Simulate loading delay for better UX
+      setTimeout(() => {
+        isTabLoading.value = false
+      }, 300)
+    }
+
+    const toggleTheme = (): void => {
+      isDark.value = !isDark.value
+      ElMessage.success(`Switched to ${isDark.value ? 'dark' : 'light'} theme`)
       
       // Apply theme to document
-      if (this.isDark) {
+      if (isDark.value) {
         document.documentElement.classList.add('dark')
       } else {
         document.documentElement.classList.remove('dark')
       }
-    },
-    
-    handleUserCommand(command) {
+    }
+
+    const handleUserCommand = (command: string): void => {
       switch (command) {
         case 'profile':
           ElMessage.info('Profile settings opened')
@@ -207,17 +203,32 @@ export default {
           ElMessage.info('Help & Support opened')
           break
         case 'logout':
-          this.handleLogout()
+          handleLogout()
           break
       }
-    },
-    
-    handleLogout() {
+    }
+
+    const handleLogout = (): void => {
       ElMessage.success('Logged out successfully')
-      this.authStore.logout()
+      authStore.value.logout()
+    }
+
+    return {
+      isDark,
+      activeTab,
+      isTabLoading,
+      authStore,
+      beforeTabLeave,
+      handleTabChange,
+      toggleTheme,
+      handleUserCommand,
+      handleLogout,
+      // Icons
+      Monitor, Bell, User, ArrowDown, Sunny, Moon, SwitchButton,
+      Setting, Help, Odometer, Reading, ChatDotRound, Document, Connection
     }
   }
-}
+})
 </script>
 
 <style scoped>
@@ -292,6 +303,7 @@ export default {
 
 .user-name {
   font-weight: 500;
+  margin-left: 0.3em;
   color: var(--el-text-color-primary);
 }
 
@@ -647,5 +659,18 @@ export default {
 
 .dark .dashboard-tabs :deep(.el-tabs__item.is-active) {
   background: linear-gradient(135deg, var(--el-bg-color) 0%, var(--el-color-primary-dark-2) 100%);
+}
+
+/* Default knowledge base content styling */
+.default-knowledgebase-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 40px 20px;
+}
+
+.default-knowledgebase-content .el-empty {
+  padding: 60px 20px;
 }
 </style>
