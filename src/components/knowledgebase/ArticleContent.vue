@@ -200,7 +200,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted, nextTick, type PropType } from 'vue'
 import { ElMessage } from 'element-plus'
-import type { Article } from '@/composables/useKnowledgebase'
+import type { Article } from '@/types/knowledgebase'
 import {
   MoreFilled,
   Printer,

@@ -12,9 +12,10 @@
       <!-- Search -->
       <div class="sidebar-search">
         <el-input
-          v-model="searchQuery"
+          v-model="localSearchQuery"
           placeholder="Search knowledge base..."
-          @keyup.enter="$emit('search', searchQuery)"
+          @input="handleSearchInput"
+          @keyup.enter="$emit('search', localSearchQuery)"
           clearable
         >
           <template #prefix>
@@ -94,7 +95,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, type PropType } from 'vue'
+import { defineComponent, computed, ref, watch, type PropType } from 'vue'
 import type { Application } from '@/types'
 import {
   ArrowLeft,
@@ -167,6 +168,20 @@ export default defineComponent({
   },
   emits: ['toggle-sidebar', 'search', 'app-change', 'menu-select', 'toggle-category', 'article-select'],
   setup(props, { emit }) {
+    // Local state for search query
+    const localSearchQuery = ref(props.searchQuery)
+    
+    // Watch props to sync local state
+    watch(() => props.searchQuery, (newValue) => {
+      localSearchQuery.value = newValue
+    })
+    
+    // Handle search input
+    const handleSearchInput = (value: string) => {
+      localSearchQuery.value = value
+      emit('search', value)
+    }
+    
     const categories = computed(() => {
       if (!props.selectedAppId) return []
       return props.getCategoriesForApp(props.selectedAppId)
@@ -192,6 +207,8 @@ export default defineComponent({
     }
 
     return {
+      localSearchQuery,
+      handleSearchInput,
       categories,
       toggleCategory,
       formatCategoryName,

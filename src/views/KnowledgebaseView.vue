@@ -26,43 +26,74 @@
 
       <!-- Main Content -->
       <div class="main-content" :class="{ 'sidebar-collapsed': sidebarCollapsed }">
-        <!-- Welcome Section (when no app selected) -->
-        <AppWelcomeSection
-          v-if="!selectedAppId"
-          :applications="applications"
-          :is-loading-apps="isLoadingApps"
-          :get-app-status-type="getAppStatusType"
-          :get-app-article-count="getAppArticleCount"
-          @select-app="selectApp"
-          @navigate-to-section="navigateToSection"
+        <!-- Search Bar -->
+        <SearchBar
+          :search-query="searchQuery"
+          :is-searching="isSearching"
+          :search-options="searchOptions"
+          :search-filters="searchFilters"
+          :search-suggestions="searchSuggestions"
+          :available-tags="availableTags"
+          :knowledgebase-apps="knowledgebaseApps"
+          :filtered-search-results="filteredSearchResults"
+          :has-active-search="hasActiveSearch"
+          @search="onSearch"
+          @clear="clearSearch"
+          @update-options="updateSearchOptions"
+          @update-filters="updateSearchFilters"
+          @get-suggestions="getSuggestions"
         />
 
-        <!-- App Overview (when app selected but on overview) -->
-        <AppOverview
-          v-else-if="activeMenuItem === 'overview' && selectedApp"
-          :app="selectedApp"
-          :quick-links="getAppQuickLinks()"
-          :article-count="getAppArticleCount(selectedAppId)"
-          :get-app-status-type="getAppStatusType"
-          @navigate-to-section="navigateToSection"
-          @navigate-to-article="navigateToArticle"
+        <!-- Search Results -->
+        <SearchResults
+          v-if="hasActiveSearch"
+          :results="searchResults"
+          :filtered-results="filteredSearchResults"
+          :search-query="searchQuery"
+          :show-results="showSearchResults"
+          @select-result="selectSearchResult"
         />
 
-        <!-- Article Content (when viewing specific article) -->
-        <ArticleContent
-          v-else
-          :article="currentArticleData"
-          :app-name="selectedApp?.name || ''"
-          :current-section="currentSection"
-          :is-favorite="isFavorite"
-          :previous-article="previousArticle"
-          :next-article="nextArticle"
-          @back-to-overview="() => onMenuSelect('overview')"
-          @toggle-favorite="toggleFavorite"
-          @share-article="shareCurrentPage"
-          @navigate-to-article="navigateToArticle"
-          @submit-feedback="submitFeedback"
-        />
+        <!-- Regular Content (only show when not searching) -->
+        <template v-if="!hasActiveSearch">
+          <!-- Welcome Section (when no app selected) -->
+          <AppWelcomeSection
+            v-if="!selectedAppId"
+            :applications="applications"
+            :is-loading-apps="isLoadingApps"
+            :get-app-status-type="getAppStatusType"
+            :get-app-article-count="getAppArticleCount"
+            @select-app="selectApp"
+            @navigate-to-section="navigateToSection"
+          />
+
+          <!-- App Overview (when app selected but on overview) -->
+          <AppOverview
+            v-else-if="activeMenuItem === 'overview' && selectedApp"
+            :app="selectedApp"
+            :quick-links="getAppQuickLinks()"
+            :article-count="getAppArticleCount(selectedAppId)"
+            :get-app-status-type="getAppStatusType"
+            @navigate-to-section="navigateToSection"
+            @navigate-to-article="navigateToArticle"
+          />
+
+          <!-- Article Content (when viewing specific article) -->
+          <ArticleContent
+            v-else
+            :article="currentArticleData"
+            :app-name="selectedApp?.name || ''"
+            :current-section="currentSection"
+            :is-favorite="isFavorite"
+            :previous-article="previousArticle"
+            :next-article="nextArticle"
+            @back-to-overview="() => onMenuSelect('overview')"
+            @toggle-favorite="toggleFavorite"
+            @share-article="shareCurrentPage"
+            @navigate-to-article="navigateToArticle"
+            @submit-feedback="submitFeedback"
+          />
+        </template>
       </div>
     </div>
   </div>
@@ -75,6 +106,8 @@ import KnowledgebaseSidebar from '@/components/knowledgebase/KnowledgebaseSideba
 import AppWelcomeSection from '@/components/knowledgebase/AppWelcomeSection.vue'
 import AppOverview from '@/components/knowledgebase/AppOverview.vue'
 import ArticleContent from '@/components/knowledgebase/ArticleContent.vue'
+import SearchBar from '@/components/knowledgebase/SearchBar.vue'
+import SearchResults from '@/components/knowledgebase/SearchResults.vue'
 
 export default defineComponent({
   name: 'KnowledgebaseView',
@@ -82,7 +115,9 @@ export default defineComponent({
     KnowledgebaseSidebar,
     AppWelcomeSection,
     AppOverview,
-    ArticleContent
+    ArticleContent,
+    SearchBar,
+    SearchResults
   },
   setup() {
     const {
@@ -93,6 +128,14 @@ export default defineComponent({
       currentSection,
       selectedAppId,
       expandedCategories,
+      knowledgebaseApps,
+      // Search state
+      searchResults,
+      isSearching,
+      searchOptions,
+      searchFilters,
+      searchSuggestions,
+      showSearchResults,
       // Computed
       applications,
       selectedApp,
@@ -101,6 +144,11 @@ export default defineComponent({
       previousArticle,
       nextArticle,
       isLoadingApps,
+      // Search computed
+      availableTags,
+      availableCategories,
+      filteredSearchResults,
+      hasActiveSearch,
       // Methods
       toggleSidebar,
       onSearch,
@@ -120,7 +168,14 @@ export default defineComponent({
       getArticlesForCategory,
       onArticleSelect,
       toggleCategory,
-      initializeKnowledgebase
+      initializeKnowledgebase,
+      // Search methods
+      performSearchOperation,
+      clearSearch,
+      updateSearchOptions,
+      updateSearchFilters,
+      getSuggestions,
+      selectSearchResult
     } = useKnowledgebase()
 
     onMounted(() => {
@@ -140,6 +195,14 @@ export default defineComponent({
       currentSection,
       selectedAppId,
       expandedCategories,
+      knowledgebaseApps,
+      // Search state
+      searchResults,
+      isSearching,
+      searchOptions,
+      searchFilters,
+      searchSuggestions,
+      showSearchResults,
       // Computed
       applications,
       selectedApp,
@@ -148,6 +211,11 @@ export default defineComponent({
       previousArticle,
       nextArticle,
       isLoadingApps,
+      // Search computed
+      availableTags,
+      availableCategories,
+      filteredSearchResults,
+      hasActiveSearch,
       // Methods
       toggleSidebar,
       onSearch,
@@ -167,7 +235,14 @@ export default defineComponent({
       getArticlesForCategory,
       onArticleSelect,
       toggleCategory,
-      handleArticleSelect
+      handleArticleSelect,
+      // Search methods
+      performSearchOperation,
+      clearSearch,
+      updateSearchOptions,
+      updateSearchFilters,
+      getSuggestions,
+      selectSearchResult
     }
   }
 })

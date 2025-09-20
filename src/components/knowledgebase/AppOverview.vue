@@ -191,7 +191,7 @@
 import { defineComponent, computed, type PropType } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { Application } from '@/types'
-import type { QuickLink } from '@/composables/useKnowledgebase'
+import type { QuickLink } from '@/types/knowledgebase'
 import {
   CircleCheck,
   Warning,
