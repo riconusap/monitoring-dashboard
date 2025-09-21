@@ -116,14 +116,14 @@ export const mockKnowledgebaseApps: KnowledgebaseApplication[] = [
           
           <h4>1. Cek Validasi Form</h4>
           <pre><code>// Check required fields
-const requiredFields = document.querySelectorAll('[required]');
-requiredFields.forEach(field => {
-  if (!field.value) {
-    console.log('Missing required field:', field.name);
-    field.style.border = '2px solid red';
-  }
-});
-</code></pre>
+          const requiredFields = document.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+            if (!field.value) {
+                console.log('Missing required field:', field.name);
+                field.style.border = '2px solid red';
+                }
+            });
+            </code></pre>
           
           <h4>2. Verifikasi Session Status</h4>
           <pre><code>// Verify user session
@@ -645,6 +645,43 @@ function validatePhone(phone) {
       }
     ],
     article_list: [
+      {
+        id: 20,
+        category_id: 30,
+        title: "File Upload Issues Resolution",
+        author: "system_admin",
+        updated_at: "2025-09-20T11:45:00Z",
+        updated_by: "system_admin",
+        created_at: "2025-09-14T13:20:00Z",
+        created_by: "system_admin",
+        content: `
+          <h2>File Upload Troubleshooting - E-Office</h2>
+          <p>Panduan mengatasi masalah upload file pada E-Office Portal.</p>
+          
+          <h3>📁 Common Upload Issues</h3>
+          <ul>
+            <li>File size too large</li>
+            <li>Unsupported file format</li>
+            <li>Upload timeout</li>
+            <li>Corrupted file detection</li>
+            <li>Network interruption</li>
+          </ul>
+          
+          <div class="alert alert-success">
+            <h4>✅ Best Practices</h4>
+            <ul>
+              <li>Implement file type validation</li>
+              <li>Use virus scanning for uploaded files</li>
+              <li>Provide clear error messages</li>
+              <li>Show upload progress indicator</li>
+              <li>Enable resume capability for large files</li>
+            </ul>
+          </div>
+        `,
+        read_time: 12,
+        views: 167,
+        tags: ["upload", "file", "document", "eoffice", "troubleshooting"]
+      },
       {
         id: 20,
         category_id: 31,

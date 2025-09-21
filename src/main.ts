@@ -3,6 +3,10 @@ import App from './App.vue';
 import router from './router';
 import { createPinia } from 'pinia';
 
+// Bootstrap
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 // Element Plus
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';

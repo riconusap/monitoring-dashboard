@@ -3,7 +3,7 @@
     <!-- Article Header -->
     <div class="article-header">
       <div class="breadcrumb-section">
-        <el-breadcrumb separator="/">
+        <el-breadcrumb separator="/" class="d-flex">
           <el-breadcrumb-item>
             <el-button 
               type="text" 
